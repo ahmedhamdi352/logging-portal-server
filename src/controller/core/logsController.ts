@@ -44,6 +44,30 @@ class LogsController {
     }
   };
 
+  public deleteLog: RequestHandler = async (req, res) => {
+    const logID = req.params.id;
+    try {
+      const log = await logsRepository.findOne({ internalId: logID });
+      if (!log)
+        return res
+          .status(EHttpStatusCode.BAD_REQUEST)
+          .json({ error: 'Invalid User ID.' });
+      if (log) {
+        log.remove();
+        return res.json(log);
+      } else {
+        return res
+          .status(500)
+          .json({ error: 'There might be a problem. Please, try again.' });
+      }
+    } catch (error) {
+      console.log('catch_error', error);
+      return res
+        .status(500)
+        .json({ error: 'There might be a problem. Please, try again.' });
+    }
+  };
+
   public createLogs: RequestHandler = async (req, res) => {
     try {
       const data = { ...req.body };
@@ -62,19 +86,6 @@ class LogsController {
             .status(500)
             .json({ error: 'There might be a problem. Please, try again.' });
         });
-      // const checkLog = await logsRepository.findOne({ date: newLog.date });
-      // if (checkLog) {
-      //   return res
-      //     .status(400)
-      //     .json({ error: 'You already have a log on this date' });
-      // } else {
-      //   const savedLog = await logsRepository.create(newLog);
-      //   const user = await logsRepository.findOne(
-      //     { internalId: savedLog.internalId },
-      //     ['user']
-      //   );
-      //   return res.json(user);
-      // }
     } catch (error) {
       console.log('catch_error', error);
       return res
