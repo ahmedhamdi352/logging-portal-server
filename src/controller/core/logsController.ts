@@ -23,7 +23,7 @@ class LogsController {
   public createLog: RequestHandler = async (req, res) => {
     try {
       const newLog = { ...req.body };
-      const checkLog = await logsRepository.findOne({ date: newLog.date });
+      const checkLog = await logsRepository.findOne({ date: newLog.date, user:{internalId:newLog.user?.internalId} });
       if (checkLog) {
         return res
           .status(400)
