@@ -43,5 +43,44 @@ class LogsController {
         .json({ error: 'There might be a problem. Please, try again.' });
     }
   };
+
+  public createLogs: RequestHandler = async (req, res) => {
+    try {
+      const data = { ...req.body };
+      console.log(data?.res, data?.res?.length);
+      Promise.all(
+        data?.res?.map(async (u: {}) => {
+          return (await logsRepository.create(u)).save();
+        })
+      )
+        .then(function (result) {
+          return res.json(result);
+        })
+        .catch(function (error) {
+          console.log('catch_error', error);
+          return res
+            .status(500)
+            .json({ error: 'There might be a problem. Please, try again.' });
+        });
+      // const checkLog = await logsRepository.findOne({ date: newLog.date });
+      // if (checkLog) {
+      //   return res
+      //     .status(400)
+      //     .json({ error: 'You already have a log on this date' });
+      // } else {
+      //   const savedLog = await logsRepository.create(newLog);
+      //   const user = await logsRepository.findOne(
+      //     { internalId: savedLog.internalId },
+      //     ['user']
+      //   );
+      //   return res.json(user);
+      // }
+    } catch (error) {
+      console.log('catch_error', error);
+      return res
+        .status(500)
+        .json({ error: 'There might be a problem. Please, try again.' });
+    }
+  };
 }
 export default new LogsController();
