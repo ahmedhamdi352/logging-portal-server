@@ -33,6 +33,10 @@ class LogsRepository {
   async create(data: {}): Promise<Logs> {
     return await getRepository(Logs).create(data).save();
   }
+
+  async update(criteria: any, updatedColumns: object) {
+    return await Logs.update(criteria, updatedColumns);
+  }
 }
 
 export default new LogsRepository();

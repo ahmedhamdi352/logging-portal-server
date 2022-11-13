@@ -326,7 +326,7 @@ const createLogs = async (callback) => {
   const data = [
     {
       day: 'Sunday',
-      date: '3-Apr',
+      date: new Date(),
       knowledgeSharing: 0,
       teamMeetings: 0,
       dailyStandup: 0,

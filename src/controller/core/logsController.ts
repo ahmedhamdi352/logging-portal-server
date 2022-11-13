@@ -1,10 +1,9 @@
 import { RequestHandler } from 'express';
 import { IUser } from '../../helper';
-import { User } from '../../entity/User';
 import logsRepository from '../../repository/logs';
-import { EHttpStatusCode, appPermissions } from '../../helper';
-import { getRepository } from 'typeorm';
-import { Logs } from '../../entity/logs';
+import usersRepository from '../../repository/user';
+import { EHttpStatusCode } from '../../helper';
+import moment from 'moment';
 
 class LogsController {
   public getAllLogs: RequestHandler = async (req, res) => {
@@ -20,10 +19,43 @@ class LogsController {
     }
   };
 
+  public cronJobHandler = async () => {
+    const day = moment().format('DD-MMM');
+    const users = await usersRepository.findAll({});
+    if (users.length !== 0) {
+      users.map(async (user) => {
+        const log = await logsRepository.findOne({
+          date: day,
+          user: { internalId: user?.internalId },
+        });
+        if (!log) {
+          await logsRepository.create({
+            day: moment().format('dddd'),
+            date: moment(),
+            knowledgeSharing: 0,
+            teamMeetings: 0,
+            dailyStandup: 0,
+            collaboration: 0,
+            learning: 0,
+            planned: 0,
+            externalSupport: 0,
+            internalSupport: 0,
+            support: 0,
+            manHour: 0,
+            user: { internalId: user?.internalId },
+          });
+        }
+      });
+    }
+  };
+
   public createLog: RequestHandler = async (req, res) => {
     try {
       const newLog = { ...req.body };
-      const checkLog = await logsRepository.findOne({ date: newLog.date, user:{internalId:newLog.user?.internalId} });
+      const checkLog = await logsRepository.findOne({
+        date: newLog.date,
+        user: { internalId: newLog.user?.internalId },
+      });
       if (checkLog) {
         return res
           .status(400)
@@ -44,6 +76,29 @@ class LogsController {
     }
   };
 
+  public updateLog: RequestHandler = async (req, res) => {
+    const logID = req.params.id;
+    try {
+      const { raw } = await logsRepository.update(
+        { internalId: logID },
+        { ...req.body }
+      );
+      if (raw) {
+        const log = await logsRepository.findOne({ internalId: logID });
+        return res.json(log);
+      } else {
+        return res
+          .status(500)
+          .json({ error: 'There might be a problem. Please, try again.' });
+      }
+    } catch (error) {
+      console.log('catch_error', error);
+      return res
+        .status(500)
+        .json({ error: 'There might be a problem. Please, try again.' });
+    }
+  };
+
   public deleteLog: RequestHandler = async (req, res) => {
     const logID = req.params.id;
     try {
@@ -51,7 +106,7 @@ class LogsController {
       if (!log)
         return res
           .status(EHttpStatusCode.BAD_REQUEST)
-          .json({ error: 'Invalid User ID.' });
+          .json({ error: 'Invalid Log ID.' });
       if (log) {
         log.remove();
         return res.json(log);
