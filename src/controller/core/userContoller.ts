@@ -14,7 +14,6 @@ class UserController {
         'role',
         'role.permissions',
       ]);
-      console.log(user);
       if (user) {
         const isPasswordMatch = user.validatePassword(password);
         if (isPasswordMatch) {
@@ -145,7 +144,6 @@ class UserController {
           .status(EHttpStatusCode.FORBIDDEN)
           .json({ message: 'Request not permitted' });
 
-      console.log(req.body, 'body');
       const newUser = { ...req.body, role: { internalId: req.body.role } };
       const savedUser = await userRepository.create(newUser);
       const user = await userRepository.findOne(

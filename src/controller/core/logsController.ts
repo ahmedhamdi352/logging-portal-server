@@ -52,21 +52,27 @@ class LogsController {
   public createLog: RequestHandler = async (req, res) => {
     try {
       const newLog = { ...req.body };
-      const checkLog = await logsRepository.findOne({
-        date: newLog.date,
+      //future work
+      const allLogs = await logsRepository.findAll({
+        // date: newLog.date,
         user: { internalId: newLog.user?.internalId },
       });
-      if (checkLog) {
-        return res
-          .status(400)
-          .json({ error: 'You already have a log on this date' });
-      } else {
-        const savedLog = await logsRepository.create(newLog);
-        const user = await logsRepository.findOne(
-          { internalId: savedLog.internalId },
-          ['user']
+      if (allLogs) {
+        const checkLog = allLogs.filter(
+          (item) => moment(item.date).format('YYYY-MM-DD') === newLog.date
         );
-        return res.json(user);
+        if (checkLog.length !== 0) {
+          return res
+            .status(400)
+            .json({ error: 'You already have a log on this date' });
+        } else {
+          const savedLog = await logsRepository.create(newLog);
+          const user = await logsRepository.findOne(
+            { internalId: savedLog.internalId },
+            ['user']
+          );
+          return res.json(user);
+        }
       }
     } catch (error) {
       console.log('catch_error', error);
@@ -126,7 +132,6 @@ class LogsController {
   public createLogs: RequestHandler = async (req, res) => {
     try {
       const data = { ...req.body };
-      console.log(data?.res, data?.res?.length);
       Promise.all(
         data?.res?.map(async (u: {}) => {
           return (await logsRepository.create(u)).save();

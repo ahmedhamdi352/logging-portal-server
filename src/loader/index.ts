@@ -12,7 +12,7 @@ export default async (expressApp: Application) => {
   await winstonLoader();
   await typeormLoader();
   await defaultsLoader();
-  cronJobsLoader();
+  // cronJobsLoader();
   expressLoader(expressApp);
   // SocketIO.init(httpServer);
 };
