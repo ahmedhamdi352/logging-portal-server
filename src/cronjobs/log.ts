@@ -1,7 +1,7 @@
 import cron from 'node-cron';
-import documentController from '../controller/core/logsController';
+import LogsController from '../controller/core/logsController';
 
-export default class DocumentCronJob {
+export default class LogCronJob {
   public static currentJob: any;
 
   public static statJob(job: cron.ScheduledTask) {
@@ -36,6 +36,6 @@ export default class DocumentCronJob {
 
   // called only when server starts
   public static async init() {
-    DocumentCronJob.createJob(documentController.cronJobHandler);
+    LogCronJob.createJob(LogsController.cronJobHandler);
   }
 }
