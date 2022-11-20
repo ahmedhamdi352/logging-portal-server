@@ -1,4 +1,4 @@
-import DocumentCronJob from '../cronjobs/document';
+import DocumentCronJob from '../cronjobs/log';
 
 export default () => {
   DocumentCronJob.init();
