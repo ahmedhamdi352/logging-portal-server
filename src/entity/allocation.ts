@@ -18,8 +18,8 @@ export class Allocation extends BaseEntity {
   month: string;
 
   @ManyToOne(() => Project, (u) => u.allocation)
-  project: Project[];
+  project: Project;
 
   @ManyToOne(() => User, (u) => u.allocation)
-  user: User[];
+  user: User;
 }

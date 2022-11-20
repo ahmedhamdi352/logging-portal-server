@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { Project } from './project';
 
 @Entity()
 export class ProjectType extends BaseEntity {
@@ -13,4 +21,7 @@ export class ProjectType extends BaseEntity {
 
   @Column()
   color: string;
+
+  @OneToMany(() => Project, (u) => u.type)
+  project: Project;
 }

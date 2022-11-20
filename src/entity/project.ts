@@ -22,8 +22,7 @@ export class Project extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(() => ProjectType)
-  @JoinColumn()
+  @ManyToOne(() => ProjectType, (u) => u.project)
   type: ProjectType;
 
   @OneToMany(() => Allocation, (role) => role.project)

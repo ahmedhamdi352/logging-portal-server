@@ -1,5 +1,5 @@
 import express from 'express';
-import AllocationController from '../controller/core/allocationController';
+import AllocationController from '../controller/core/allocation';
 import { authenticated } from '../middlewares';
 
 const router = express.Router();
