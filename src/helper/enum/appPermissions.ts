@@ -3,7 +3,7 @@ export enum appPermissions {
   updateUsers = 'updateUsers',
   deleteUsers = 'delete_users',
   manageRoles = 'manage_roles',
-  showCharts = 'showCharts',
+  showAllCharts = 'showAllCharts',
   manageTeam = 'manageTeam',
   showTeamCharts = 'showTeamCharts',
   addLog = 'addLog',

@@ -9,9 +9,10 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Role } from './Role';
+import { Allocation } from './allocation';
 import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 import config from '../config';
 import { v4 as uuidv4 } from 'uuid';
 import { Logs } from './logs';
@@ -42,8 +43,23 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
+  @Column()
+  speciality: string;
+
   @OneToMany(() => Logs, (u) => u.user)
   logs: Logs[];
+
+  @ManyToOne(() => User, (service) => service.children)
+  directManger: User;
+
+  @OneToMany(() => User, (service) => service.directManger)
+  children: User[];
+
+  @ManyToOne(() => User, (service) => service.childrenMentor)
+  mentorManger: User;
+
+  @OneToMany(() => User, (service) => service.mentorManger)
+  childrenMentor: User[];
 
   @BeforeInsert()
   updatePasswordBeforeInsert() {
@@ -58,9 +74,14 @@ export class User extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ default: false })
+  hasTeam: boolean;
+
   @ManyToOne(() => Role, (role) => role.user)
   role: Role;
 
+  @OneToMany(() => Allocation, (role) => role.user)
+  allocation: Allocation;
   // Functions
   public validatePassword = (password: string): boolean => {
     return compareSync(password, this.password);
@@ -72,6 +93,9 @@ export class User extends BaseEntity {
   };
   public generateAuthToken = (): string => {
     const { jwt } = config;
+    const directManger = isEmpty(this.directManger)
+      ? {}
+      : { ...this.directManger, password: null };
     const role = this.role?.name || null;
     const rolePermissions = this.role?.permissions || [];
     const permissions = _.mapValues(
@@ -86,6 +110,8 @@ export class User extends BaseEntity {
         role,
         permissions,
         phone: this.phone,
+        directManger: directManger,
+        hasTeam: this.hasTeam,
       },
       jwt.secret,
       {

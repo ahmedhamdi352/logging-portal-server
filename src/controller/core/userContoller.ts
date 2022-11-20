@@ -13,6 +13,7 @@ class UserController {
       let user = await userRepository.findOne({ username, isActive: true }, [
         'role',
         'role.permissions',
+        'directManger',
       ]);
       if (user) {
         const isPasswordMatch = user.validatePassword(password);
