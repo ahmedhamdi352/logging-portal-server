@@ -15,7 +15,7 @@ export class Logs extends BaseEntity {
   day: string;
 
   @Column()
-  date: Date;
+  date: string;
 
   @Column()
   knowledgeSharing: number;

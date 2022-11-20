@@ -205,6 +205,16 @@ const createUsers = async (callback) => {
       role: { internalId: adminRole.internalId },
       isActive: true,
     },
+    {
+      firstName: 'shazly',
+      lastName: 'elshrief',
+      username: 'shazly',
+      password: 'P@ssw0rd',
+      email: 'abdelrhman@gmail.com',
+      phone: '01025811013',
+      role: { internalId: adminRole.internalId },
+      isActive: true,
+    },
   ];
 
   Promise.all(
@@ -326,7 +336,7 @@ const createLogs = async (callback) => {
   const data = [
     {
       day: 'Sunday',
-      date: new Date(),
+      date: '3-Oct',
       knowledgeSharing: 0,
       teamMeetings: 0,
       dailyStandup: 0,
