@@ -74,6 +74,9 @@ export class User extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column()
+  projectAllocation: string;
+
   @Column({ default: false })
   hasTeam: boolean;
 

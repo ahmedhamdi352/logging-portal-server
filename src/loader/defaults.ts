@@ -300,6 +300,11 @@ const createAllocation = async (callback) => {
       project: { internalId: 4 },
       user: { internalId: 13 },
     },
+    {
+      month: 'may',
+      project: { internalId: 12 },
+      user: { internalId: 13 },
+    },
   ];
 
   Promise.all(
