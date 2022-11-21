@@ -14,7 +14,7 @@ export class Allocation extends BaseEntity {
   @PrimaryGeneratedColumn()
   internalId: number;
 
-  @Column({ unique: true })
+  @Column()
   month: string;
 
   @ManyToOne(() => Project, (u) => u.allocation)
