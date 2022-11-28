@@ -4,7 +4,6 @@ import config from '../config';
 
 export default async () => {
   let { dbConfig }: any = config;
-  console.log(dbConfig);
   return createConnection(dbConfig)
     .then(() => {
       winston.info('Connected to DB');

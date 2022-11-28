@@ -24,6 +24,7 @@ class LogsRepository {
         'internalSupport',
         'support',
         'manHour',
+        'vacation',
       ],
       relations: ['user'],
       order: { internalId: 'ASC' },

@@ -20,32 +20,36 @@ class LogsController {
   };
 
   public cronJobHandler = async () => {
-    const day = moment().format('DD-MMM');
-    const users = await usersRepository.findAll({});
-    if (users.length !== 0) {
-      users.map(async (user) => {
-        const log = await logsRepository.findOne({
-          date: day,
-          user: { internalId: user?.internalId },
-        });
-        if (!log) {
-          await logsRepository.create({
-            day: moment().format('dddd'),
-            date: moment(),
-            knowledgeSharing: 0,
-            teamMeetings: 0,
-            dailyStandup: 0,
-            collaboration: 0,
-            learning: 0,
-            planned: 0,
-            externalSupport: 0,
-            internalSupport: 0,
-            support: 0,
-            manHour: 0,
+    const date = moment().format('YYYY-MM-DD');
+    const day = moment().format('dddd');
+    if (day === 'Friday' || day === 'Saturday') {
+      const users = await usersRepository.findAll({});
+      if (users.length !== 0) {
+        users.map(async (user) => {
+          const log = await logsRepository.findOne({
+            date: date,
             user: { internalId: user?.internalId },
           });
-        }
-      });
+          if (!log) {
+            await logsRepository.create({
+              day: moment().format('dddd'),
+              date: moment().format('YYYY-MM-DD'),
+              knowledgeSharing: 0,
+              teamMeetings: 0,
+              dailyStandup: 0,
+              collaboration: 0,
+              learning: 0,
+              planned: 0,
+              externalSupport: 0,
+              internalSupport: 0,
+              support: 0,
+              manHour: 0,
+              user: { internalId: user?.internalId },
+              vacation: true,
+            });
+          }
+        });
+      }
     }
   };
 
