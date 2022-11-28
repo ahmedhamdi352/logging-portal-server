@@ -31,9 +31,9 @@ export default async () => {
         return createProject(callback);
       },
 
-      function (callback) {
-        return createAllocation(callback);
-      },
+      // function (callback) {
+      //   return createAllocation(callback);
+      // },
     ],
     function (err) {
       if (err) winston.warn(err);
@@ -297,12 +297,7 @@ const createAllocation = async (callback) => {
   const data = [
     {
       month: 'may',
-      project: { internalId: 11 },
-      user: { internalId: 13 },
-    },
-    {
-      month: 'may',
-      project: { internalId: 12 },
+      project: { internalId: 20 },
       user: { internalId: 13 },
     },
   ];

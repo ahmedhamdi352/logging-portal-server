@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import ProjectsRepository from '../../repository/project';
 import { EHttpStatusCode } from '../../helper';
+import allocation from '../../repository/allocation';
 
 class ProjectController {
   public getAllProjects: RequestHandler = async (req, res) => {
@@ -67,6 +68,10 @@ class ProjectController {
           .status(EHttpStatusCode.BAD_REQUEST)
           .json({ error: 'Invalid Log ID.' });
       if (project) {
+        const allocations = await allocation.findAll({
+          project: projectId,
+        });
+        await allocations.map((item) => item.remove());
         project.remove();
         return res.json(project);
       } else {
