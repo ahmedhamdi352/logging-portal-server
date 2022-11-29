@@ -5,6 +5,7 @@ import userRepository from '../../repository/user';
 import { EHttpStatusCode, appPermissions } from '../../helper';
 import { getRepository } from 'typeorm';
 import { Role } from '../../entity/Role';
+import allocation from '../../repository/allocation';
 
 class UserController {
   public login: RequestHandler = async (req, res) => {
@@ -159,6 +160,26 @@ class UserController {
         .json({ error: 'There might be a problem. Please, try again.' });
     }
   };
+  public getRelatedUser: RequestHandler = async (req, res) => {
+    try {
+      const reqUser = req.user as User;
+      if (reqUser?.role?.name === 'admin') {
+        const users = await userRepository.findAll({});
+        return res.json(users);
+      } else {
+        const users = await userRepository.findAll({
+          directManger: { internalId: reqUser?.internalId },
+        });
+        return res.json(users);
+      }
+    } catch (error) {
+      console.log('catch_error', error);
+      return res
+        .status(500)
+        .json({ error: 'There might be a problem. Please, try again.' });
+    }
+  };
+
   public updateUser: RequestHandler = async (req, res) => {
     try {
       const reqUser = req.user as User;
@@ -206,19 +227,18 @@ class UserController {
     try {
       const reqUser = req.user as User;
       const userId = req.params.userId;
-      const neededPermissions = reqUser.role.permissions.filter(
-        (p) => p.name === appPermissions.deleteUsers
-      );
-      if (!neededPermissions || !neededPermissions.length)
-        return res
-          .status(EHttpStatusCode.FORBIDDEN)
-          .json({ message: 'Request not permitted' });
       const user = await userRepository.findOne({ internalId: userId });
       if (!user)
         return res
           .status(EHttpStatusCode.BAD_REQUEST)
           .json({ error: 'Invalid User ID.' });
       if (user) {
+        const allocations = await allocation.findAll({
+          user: { internalId: userId },
+        });
+        if (allocations.length !== 0) {
+          await allocations.map((item) => item.remove());
+        }
         user.remove();
         return res.json(user);
       } else {

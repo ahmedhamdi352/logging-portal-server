@@ -24,7 +24,8 @@ router.get('/receptionist', userContoller.getAllreceptionist);
 router.get('/finance', userContoller.getAllfinance);
 
 router.post('/', createUserValidation, userContoller.createUser);
-router.delete('/delete/:userId', userContoller.deleteUser);
+router.delete('/:userId', userContoller.deleteUser);
 router.put('/:userId', updateUserValidation, userContoller.updateUser);
+router.get('/getRelatedUser', authenticated, userContoller.getRelatedUser);
 
 export default router;
