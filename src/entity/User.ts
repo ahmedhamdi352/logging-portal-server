@@ -74,7 +74,7 @@ export class User extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column()
+  @Column({nullable:true})
   projectAllocation: string;
 
   @Column({ default: false })

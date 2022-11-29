@@ -302,7 +302,7 @@ const createAllocation = async (callback) => {
     },
     {
       month: 'may',
-      project: { internalId: 12 },
+      project: { internalId: 4 },
       user: { internalId: 13 },
     },
   ];
