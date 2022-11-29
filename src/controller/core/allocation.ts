@@ -19,9 +19,12 @@ class AllocationController {
     try {
       const newAllocation = { ...req.body };
       const savedProject = await AllocationsRepository.create(newAllocation);
-      const allocation = await AllocationsRepository.findOne({
-        internalId: savedProject.internalId,
-      });
+      const allocation = await AllocationsRepository.findOne(
+        {
+          internalId: savedProject.internalId,
+        },
+        ['user', 'project']
+      );
       return res.json(allocation);
     } catch (error) {
       console.log('catch_error', error);

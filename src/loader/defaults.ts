@@ -31,9 +31,9 @@ export default async () => {
         return createProject(callback);
       },
 
-      function (callback) {
-        return createAllocation(callback);
-      },
+      // function (callback) {
+      //   return createAllocation(callback);
+      // },
     ],
     function (err) {
       if (err) winston.warn(err);
@@ -44,6 +44,8 @@ export default async () => {
 const createUsers = async (callback) => {
   const repo = getRepository(User);
   const adminRole = await getRepository(Role).findOne({ name: 'admin' });
+  const mangerRole = await getRepository(Role).findOne({ name: 'manger' });
+  const employeeRole = await getRepository(Role).findOne({ name: 'employee' });
 
   const users = [
     {
@@ -84,7 +86,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: mangerRole.internalId },
       isActive: true,
     },
     {
@@ -94,7 +96,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -104,7 +106,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: mangerRole.internalId },
       isActive: true,
     },
     {
@@ -114,7 +116,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: mangerRole.internalId },
       isActive: true,
     },
     {
@@ -124,7 +126,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -134,7 +136,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -144,7 +146,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -154,7 +156,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -164,7 +166,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -174,7 +176,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -184,7 +186,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -194,7 +196,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -204,7 +206,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -214,7 +216,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
     {
@@ -224,7 +226,7 @@ const createUsers = async (callback) => {
       password: 'P@ssw0rd',
       email: 'abdelrhman@gmail.com',
       phone: '01025811013',
-      role: { internalId: adminRole.internalId },
+      role: { internalId: employeeRole.internalId },
       isActive: true,
     },
   ];
@@ -438,6 +440,7 @@ const createRoles = async (callback) => {
           'delete_users',
           'showTeamCharts',
           'manageTeam',
+          'addLog',
         ].includes(perm.name)
       ),
     },

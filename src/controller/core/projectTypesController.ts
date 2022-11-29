@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
 import typeRepository from '../../repository/types';
 import { EHttpStatusCode } from '../../helper';
+import project from '../../repository/project';
+import allocation from '../../repository/allocation';
 
 class TypesController {
   public getAllTypes: RequestHandler = async (req, res) => {
@@ -63,6 +65,26 @@ class TypesController {
           .status(EHttpStatusCode.BAD_REQUEST)
           .json({ error: 'Invalid Log ID.' });
       if (type) {
+        const projects = await project.findAll({
+          type: typeId,
+        });
+        // if (projects.length !== 0) {
+        //   await projects.map(async (d) => {
+        //     // console.log(item, 'projects');
+        //     const allocations = await allocation.findAll({
+        //       project: d.internalId,
+        //     });
+        //     if (allocations.length !== 0) {
+        //       await allocations.map((item) => {
+        //         console.log(item, 'allocation');
+        //         item.remove();
+        //       });
+        //     }
+        //     setTimeout(() => {
+        //       d.remove();
+        //     }, 1500);
+        //   });
+        // }
         type.remove();
         return res.json(type);
       } else {

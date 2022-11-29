@@ -43,7 +43,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   speciality: string;
 
   @OneToMany(() => Logs, (u) => u.user)
@@ -74,7 +74,7 @@ export class User extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   projectAllocation: string;
 
   @Column({ default: false })
