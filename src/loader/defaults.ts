@@ -299,7 +299,12 @@ const createAllocation = async (callback) => {
   const data = [
     {
       month: 'may',
-      project: { internalId: 20 },
+      project: { internalId: 4 },
+      user: { internalId: 13 },
+    },
+    {
+      month: 'may',
+      project: { internalId: 4 },
       user: { internalId: 13 },
     },
   ];

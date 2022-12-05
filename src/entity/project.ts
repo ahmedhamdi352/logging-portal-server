@@ -15,7 +15,7 @@ export class Project extends BaseEntity {
   @PrimaryGeneratedColumn()
   internalId: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column({ default: true })
