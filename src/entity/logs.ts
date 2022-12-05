@@ -5,6 +5,7 @@ import {
   BaseEntity,
   ManyToOne,
 } from 'typeorm';
+import { Project } from './project';
 import { User } from './User';
 @Entity()
 export class Logs extends BaseEntity {
@@ -15,7 +16,7 @@ export class Logs extends BaseEntity {
   day: string;
 
   @Column()
-  date: Date;
+  date: string;
 
   @Column()
   knowledgeSharing: number;
@@ -30,7 +31,10 @@ export class Logs extends BaseEntity {
   collaboration: number;
 
   @Column()
-  learning: number;
+  acceptedLearning: number;
+
+  @Column()
+  personalLearning: number;
 
   @Column()
   planned: number;
@@ -52,4 +56,7 @@ export class Logs extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.logs)
   user: User;
+
+  @ManyToOne(() => Project, (user) => user.logs, { nullable: true })
+  project: Project;
 }

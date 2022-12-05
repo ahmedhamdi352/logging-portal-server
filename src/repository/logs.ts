@@ -18,14 +18,16 @@ class LogsRepository {
         'dailyStandup',
         'teamMeetings',
         'collaboration',
-        'learning',
+        'personalLearning',
+        'acceptedLearning',
         'planned',
         'externalSupport',
         'internalSupport',
         'support',
         'manHour',
+        'vacation',
       ],
-      relations: ['user'],
+      relations: ['user', 'project'],
       order: { internalId: 'ASC' },
     });
   }

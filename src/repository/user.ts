@@ -20,6 +20,7 @@ class UserRepository {
         'email',
         'username',
         'phone',
+        'speciality',
         'isActive',
       ],
       relations: ['role'],

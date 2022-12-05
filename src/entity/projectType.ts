@@ -3,10 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  ManyToOne,
+  ManyToMany,
+  JoinTable,
   OneToMany,
 } from 'typeorm';
 import { Project } from './project';
+import { string } from 'joi';
 
 @Entity()
 export class ProjectType extends BaseEntity {

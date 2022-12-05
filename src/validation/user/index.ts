@@ -38,7 +38,8 @@ export const createUserValidation = (
     email: Joi.string().email().required(),
     phone: Joi.number().required(),
     role: Joi.number().required(),
-    isActive: Joi.boolean().required(),
+    directManger: Joi.number().required(),
+    speciality: Joi.string().required(),
   });
   validateRequest(req, res, next, schema);
 };
@@ -69,9 +70,10 @@ export const updateUserValidation = (
     lastName: Joi.string().required(),
     username: Joi.string().required(),
     email: Joi.string().email().required(),
-    role: Joi.number().required(),
     phone: Joi.number().required(),
-    isActive: Joi.boolean().required(),
+    role: Joi.number().required(),
+    directManger: Joi.number().required(),
+    speciality: Joi.string().required(),
   });
   validateRequest(req, res, next, schema);
 };

@@ -23,13 +23,13 @@ export default async () => {
       function (callback) {
         return createUsers(callback);
       },
-      function (callback) {
-        return createTypes(callback);
-      },
+      // function (callback) {
+      //   return createTypes(callback);
+      // },
 
-      function (callback) {
-        return createProject(callback);
-      },
+      // function (callback) {
+      //   return createProject(callback);
+      // },
 
       // function (callback) {
       //   return createAllocation(callback);
@@ -472,7 +472,7 @@ const createLogs = async (callback) => {
   const data = [
     {
       day: 'Sunday',
-      date: new Date(),
+      date: new Date().toString(),
       knowledgeSharing: 0,
       teamMeetings: 0,
       dailyStandup: 0,

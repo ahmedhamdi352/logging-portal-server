@@ -118,14 +118,20 @@ class UserController {
     }
   };
 
-  public getAllfinance: RequestHandler = async (req, res) => {
+  public getAllMangers: RequestHandler = async (req, res) => {
     try {
-      const AdminRole = await getRepository(Role).findOne({ name: 'finance' });
-
-      const users = await userRepository.findAll({
-        role: { internalId: AdminRole.internalId },
+      const MangerRole = await getRepository(Role).findOne({ name: 'manger' });
+      const adminRole = await getRepository(Role).findOne({
+        name: 'admin',
       });
-      return res.json(users);
+
+      const mangerusers = await userRepository.findAll({
+        role: { internalId: MangerRole.internalId },
+      });
+      const adminUsers = await userRepository.findAll({
+        role: { internalId: adminRole.internalId },
+      });
+      return res.json([...mangerusers, ...adminUsers]);
     } catch (error) {
       console.log('catch_error', error);
       return res
@@ -136,23 +142,28 @@ class UserController {
 
   public createUser: RequestHandler = async (req, res) => {
     try {
-      // Check If user has the authority to run this
-      const reqUser = req.user as User;
-      const neededPermissions = reqUser.role.permissions.filter(
-        (p) => p.name === appPermissions.addUsers
-      );
-      if (!neededPermissions || !neededPermissions.length)
+      const exsistUser = await userRepository.findOne({
+        username: req.body.username,
+      });
+      if (exsistUser) {
         return res
-          .status(EHttpStatusCode.FORBIDDEN)
-          .json({ message: 'Request not permitted' });
-
-      const newUser = { ...req.body, role: { internalId: req.body.role } };
-      const savedUser = await userRepository.create(newUser);
-      const user = await userRepository.findOne(
-        { internalId: savedUser.internalId },
-        ['role']
-      );
-      return res.json(user);
+          .status(EHttpStatusCode.BAD_REQUEST)
+          .json({ error: 'username already exist' });
+      } else {
+        const newUser = {
+          ...req.body,
+          role: {
+            internalId: req.body.role,
+          },
+          directManger: { internalId: req.body.directManger },
+        };
+        const savedUser = await userRepository.create(newUser);
+        const user = await userRepository.findOne(
+          { internalId: savedUser.internalId },
+          ['role']
+        );
+        return res.json(user);
+      }
     } catch (error) {
       console.log('catch_error', error);
       return res
@@ -160,6 +171,7 @@ class UserController {
         .json({ error: 'There might be a problem. Please, try again.' });
     }
   };
+  public getUsersBasedRole: RequestHandler = async (req, res) => {};
   public getRelatedUser: RequestHandler = async (req, res) => {
     try {
       const reqUser = req.user as User;
@@ -182,15 +194,7 @@ class UserController {
 
   public updateUser: RequestHandler = async (req, res) => {
     try {
-      const reqUser = req.user as User;
       const userId = req.params.userId;
-      const neededPermissions = reqUser.role.permissions.filter(
-        (p) => p.name === appPermissions.updateUsers
-      );
-      if (!neededPermissions || !neededPermissions.length)
-        return res
-          .status(EHttpStatusCode.FORBIDDEN)
-          .json({ message: 'Request not permitted' });
       const { raw } = await userRepository.update(
         { internalId: userId },
         { ...req.body }
@@ -198,7 +202,7 @@ class UserController {
       if (raw) {
         const user = await userRepository.findOne(
           { internalId: userId },
-          ['role'],
+          ['role', 'directManger'],
           [
             'internalId',
             'firstName',
@@ -206,8 +210,10 @@ class UserController {
             'email',
             'username',
             'phone',
+            'speciality',
             'isActive',
             'role',
+            'directManger',
           ]
         );
         return res.json(user);

@@ -2,12 +2,42 @@ import { RequestHandler } from 'express';
 import ProjectsRepository from '../../repository/project';
 import { EHttpStatusCode } from '../../helper';
 import allocation from '../../repository/allocation';
+import { isEmpty } from 'lodash';
+import { IUser } from '../../helper';
 
 class ProjectController {
   public getAllProjects: RequestHandler = async (req, res) => {
     try {
       const types = await ProjectsRepository.findAll();
-      return res.json(types);
+      const result = types.map((item) => {
+        return {
+          ...item,
+          logTypes: isEmpty(item.logTypes) ? [] : item.logTypes.split(','),
+        };
+      });
+      return res.json(result);
+    } catch (error) {
+      console.log('catch_error', error);
+      return res
+        .status(500)
+        .json({ error: 'There might be a problem. Please, try again.' });
+    }
+  };
+
+  public getAllProjectsByIds: RequestHandler = async (req, res) => {
+    const { internalId } = req.user as IUser;
+    try {
+      const allocations = await allocation.findAll({
+        user: internalId,
+      });
+      const result = allocations.map((item) => {
+        return {
+          name: item.project?.name,
+          internalId: item.project?.internalId,
+          logTypes: item.project?.logTypes.split(','),
+        };
+      });
+      return res.json(result);
     } catch (error) {
       console.log('catch_error', error);
       return res

@@ -10,15 +10,6 @@ import { User } from '../../entity/User';
 class RoleController {
   public createRole: RequestHandler = async (req, res) => {
     try {
-      // Check If user has the authority to run this
-      const reqUser = req.user as User;
-      const neededPermissions = reqUser.role.permissions.filter(
-        (p) => p.name === appPermissions.manageRoles
-      );
-      if (!neededPermissions || !neededPermissions.length)
-        return res
-          .status(EHttpStatusCode.FORBIDDEN)
-          .json({ message: 'Request not permitted' });
       const { name, permissions } = req.body;
       if (!name || !permissions || !permissions.length)
         return res
@@ -162,16 +153,6 @@ class RoleController {
 
   public getRoles: RequestHandler = async (req, res) => {
     try {
-      // Check If user has the authority to run this
-      const reqUser = req.user as User;
-      const neededPermissions = reqUser.role.permissions.filter(
-        (p) => p.name === appPermissions.manageRoles
-      );
-      if (!neededPermissions || !neededPermissions.length)
-        return res
-          .status(EHttpStatusCode.FORBIDDEN)
-          .json({ message: 'Request not permitted' });
-
       const roles = await roleRepository.findAll();
       return res.json(roles);
     } catch (error) {

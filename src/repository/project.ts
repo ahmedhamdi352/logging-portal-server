@@ -9,7 +9,15 @@ class ProjectsRepository {
   async findAll(where = {}): Promise<Project[]> {
     return await Project.find({
       where,
-      select: ['internalId', 'name', 'isActive'],
+      select: [
+        'internalId',
+        'name',
+        'isActive',
+        'country',
+        'customer',
+        'trxNumber',
+        'logTypes',
+      ],
       relations: ['type'],
       order: { internalId: 'ASC' },
     });

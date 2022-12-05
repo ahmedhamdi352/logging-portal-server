@@ -10,7 +10,14 @@ class LogsController {
     try {
       const { internalId } = req.user as IUser;
       const logs = await logsRepository.findAll({ user: internalId });
-      return res.json(logs);
+      const result = logs.map((item) => {
+        return {
+          ...item,
+          project: item?.project?.name,
+          projectId: item?.project?.internalId,
+        };
+      });
+      return res.json(result);
     } catch (error) {
       console.log('catch_error', error);
       return res
@@ -36,7 +43,9 @@ class LogsController {
             teamMeetings: 0,
             dailyStandup: 0,
             collaboration: 0,
-            learning: 0,
+            personalLearning: 0,
+            acceptedLearning: 0,
+            project: null,
             planned: 0,
             externalSupport: 0,
             internalSupport: 0,
@@ -52,28 +61,14 @@ class LogsController {
   public createLog: RequestHandler = async (req, res) => {
     try {
       const newLog = { ...req.body };
-      //future work
-      const allLogs = await logsRepository.findAll({
-        // date: newLog.date,
-        user: { internalId: newLog.user?.internalId },
-      });
-      if (allLogs) {
-        const checkLog = allLogs.filter(
-          (item) => moment(item.date).format('YYYY-MM-DD') === newLog.date
-        );
-        if (checkLog.length !== 0) {
-          return res
-            .status(400)
-            .json({ error: 'You already have a log on this date' });
-        } else {
-          const savedLog = await logsRepository.create(newLog);
-          const user = await logsRepository.findOne(
-            { internalId: savedLog.internalId },
-            ['user']
-          );
-          return res.json(user);
-        }
-      }
+      const savedLog = await logsRepository.create(newLog);
+      const user = await logsRepository.findOne(
+        { internalId: savedLog.internalId },
+        ['user']
+      );
+      return res.json(user);
+      // }
+      // }
     } catch (error) {
       console.log('catch_error', error);
       return res
