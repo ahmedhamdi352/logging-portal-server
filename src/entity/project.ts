@@ -21,14 +21,14 @@ export class Project extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column()
+  @Column({nullable:true})
   customer: string;
 
   @Column()
   country: string;
 
-  @Column()
-  trxNumber: number;
+  @Column({nullable:true})
+  soNumber: number;
 
   @Column()
   logTypes: string;
