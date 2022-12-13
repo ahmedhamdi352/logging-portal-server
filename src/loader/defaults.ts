@@ -284,14 +284,10 @@ const createPermissions = async (callback) => {
     });
 };
 
+// 
 const createAllocation = async (callback) => {
   const repo = getRepository(Allocation);
   const data = [
-    {
-      month: 'may',
-      project: { internalId: 4 },
-      user: { internalId: 13 },
-    },
     {
       month: 'may',
       project: { internalId: 4 },
@@ -318,13 +314,10 @@ const createAllocation = async (callback) => {
     });
 };
 
+
 const createProject = async (callback) => {
   const repo = getRepository(Project);
   const data = [
-    {
-      name: 'ZATCA-RE',
-      type: { internalId: 3 },
-    },
     {
       name: 'APPDYNMICS PARTNERSHIP',
       type: { internalId: 4 },
