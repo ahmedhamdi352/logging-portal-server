@@ -117,3 +117,4 @@ sketch
 *.zip
 
 build/
+.vercel

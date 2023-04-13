@@ -10,9 +10,9 @@ import httpServer from '../server';
 
 export default async (expressApp: Application) => {
   await winstonLoader();
-  await typeormLoader();
-  await defaultsLoader();
-  cronJobsLoader();
+  // await typeormLoader();
+  // await defaultsLoader();
+  // cronJobsLoader();
   expressLoader(expressApp);
   // SocketIO.init(httpServer);
 };
