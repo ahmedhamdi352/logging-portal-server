@@ -15,7 +15,7 @@ class ProjectsRepository {
         'isActive',
         'country',
         'customer',
-        'trxNumber',
+        'soNumber',
         'logTypes',
       ],
       relations: ['type'],
