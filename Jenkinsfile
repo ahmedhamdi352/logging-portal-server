@@ -18,7 +18,7 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}"){
             sh 'npm cache verify'
-            sh 'npm install -g npm'
+            sh 'npm install -g npm@8.19.1'
             // sh 'npm ci --fetch-retries 10'
             sh 'mv -f ".env.example" ".env"'
         }
