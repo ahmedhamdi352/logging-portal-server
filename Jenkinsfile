@@ -5,6 +5,10 @@ pipeline {
   agent any
     
   tools {nodejs "NodeJS"}
+      environment {
+        NPM_CONFIG_FETCH_RETRIES = 10
+        // Add other environment variables if needed
+    }
     
   stages {
     //  stage('Checkout') {
@@ -17,17 +21,22 @@ pipeline {
   stage('Prepare environment'){
       steps {
         dir("${env.WORKSPACE}"){
-            sh 'npm cache verify'
+            sh 'npm cache clean --force'
             sh 'npm install -g npm@8.19.1'
             // sh 'npm ci --fetch-retries 10'
             sh 'mv -f ".env.example" ".env"'
         }
       }
     }
-      stage('Build') {
+          stage('install dependancies') {
             steps {
                 // Install dependencies and build the Node.js app
                 sh 'npm install'
+            }
+        }
+      stage('Build') {
+            steps {
+                // Install dependencies and build the Node.js app
                 sh 'npm run build'
             }
         }
