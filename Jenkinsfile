@@ -18,6 +18,8 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}"){
             sh 'npm cache verify'
+            sh  'node --version'
+            sh 'npm --version'
             // sh 'npm ci --fetch-retries 10'
             sh 'mv -f ".env.example" ".env"'
         }
