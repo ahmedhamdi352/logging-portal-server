@@ -18,8 +18,7 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}"){
             sh 'npm cache verify'
-            sh  'node --version'
-            sh 'npm --version'
+            sh 'npm install -g npm'
             // sh 'npm ci --fetch-retries 10'
             sh 'mv -f ".env.example" ".env"'
         }
@@ -28,7 +27,7 @@ pipeline {
       stage('Build') {
             steps {
                 // Install dependencies and build the Node.js app
-                sh 'npm install --no-save'
+                sh 'npm install'
                 sh 'npm run build'
             }
         }
