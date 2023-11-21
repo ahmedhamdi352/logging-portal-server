@@ -7,12 +7,12 @@ pipeline {
   tools {nodejs "NodeJS"}
     
   stages {
-     stage('Checkout') {
-            steps {
-                // Checkout the source code from your GitHub repository
-                checkout scm
-            }
-        }
+    //  stage('Checkout') {
+    //         steps {
+    //             // Checkout the source code from your GitHub repository
+    //             checkout scm
+    //         }
+    //     }
 
   stage('Prepare environment'){
       steps {
