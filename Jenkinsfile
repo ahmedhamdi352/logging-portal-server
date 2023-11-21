@@ -18,7 +18,14 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}"){
             sh 'npm cache verify'
-            sh 'npm install -g npm@8.19.1'
+            try {
+          
+                        sh 'npm install -g npm@8.19.1'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Test failed: ${e.message}"
+                    }
+           
             // sh 'npm ci --fetch-retries 10'
             sh 'mv -f ".env.example" ".env"'
         }
@@ -27,7 +34,14 @@ pipeline {
       stage('Build') {
             steps {
                 // Install dependencies and build the Node.js app
-                sh 'npm install'
+                 try {
+          
+                          sh 'npm install'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Test failed: ${e.message}"
+                    }
+              
                 sh 'npm run build'
             }
         }
@@ -58,7 +72,15 @@ pipeline {
     //     }
     //   }
     // }
-
+post {
+        always {
+            // Cleanup or post-build steps that should always run
+        }
+        failure {
+            echo 'Pipeline failed!'
+            // Additional actions to take when the pipeline fails
+        }
+    }
 
   }
 }
