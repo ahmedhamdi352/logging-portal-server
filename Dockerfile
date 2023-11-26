@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 # Move .env.example to .env
-RUN mv -f .env.example .env
+COPY .env.example .env
 
 COPY . .
 
